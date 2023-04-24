@@ -4,7 +4,7 @@ const cors = require('cors');
 const app = express();
 const config = require('./config');
 
-const port = config.port || 3000;
+const port = config.port || 5050;
 
 app.use(bodyParser.json());
 app.use(cors());
