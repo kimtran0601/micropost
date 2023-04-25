@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = 'http://localhost:5050/api/posts'
+const url = 'api/posts/'
 
 class PostService{
     // Get Post
@@ -9,6 +9,7 @@ class PostService{
             try {
                 const res = await axios.get(url);
                 const data = res.data;
+                console.log({data});
                 resolve(
                     data.map(post => ({
                         ...post,

@@ -1,30 +1,54 @@
 <template>
-  <div class="container">
-    <h1>Latest Posts</h1>
-    
-    <div class="create-post">
-      <label for="create-post">Say Something</label>
-      <input type="text" id="create-post" v-model="text" placeholder="Create a post">
-      <button v-on:click="createPost">Post!</button>
-    </div>
-
-    <hr>
-    <p class="error" v-if="error">{{ error }}</p>
-
-    <div class="posts-container">
-      <div class="post"
-        v-for="(post, index) in posts"
-        v-bind:item="post"
-        v-bind:index="index"
-        v-bind:key="post._id"
+  <v-col>
+    <v-row>
+      <v-sheet 
+        width="300" 
+        class="pa-2 ma-2 mx-auto"
       >
-        {{ `${post.createdAt.getDate()}/${post.createdAt.getMonth()}/${post.createdAt.getFullYear()}` }}
-        <p class="text">{{ post.text }}</p>
-        <button v-on:click="deletePost(post._id)">Delete!</button>
-      </div>
+        <v-form @submit.prevent>
+          <v-text-field
+            v-model="text"
+            label="What is in your mind?"
+          ></v-text-field>
+          <v-btn @click="createPost" block class="mt-1">Post</v-btn>
+        </v-form>
+      </v-sheet>
+    </v-row>
 
-    </div>
-  </div>
+    <v-row 
+      v-for="(post, index) in posts"
+      v-bind:item="post"
+      v-bind:index="index"
+      v-bind:key="post._id"
+      justify="center">
+      <v-card
+        class="pa-2 ma-2"
+        width="300"
+        variant="outlined"
+      >
+        <v-card-item>
+          <div>
+            <div class="text-h6 mb-1">
+              {{ `${post.createdAt.getDate()}/${post.createdAt.getMonth()}/${post.createdAt.getFullYear()}` }}
+            </div>
+              <div class="text-caption">
+              
+              <p class="text">{{ post.text }}</p>
+            </div>
+          </div>
+        </v-card-item>
+
+        <v-card-actions>
+          <v-btn variant="outlined" @click="deletePost(post._id)" color="error">
+            Delete
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-row>
+  </v-col>
+  
+
+  
 </template>
 
 <script>
