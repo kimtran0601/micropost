@@ -1,42 +1,33 @@
 const express = require('express');
-const mongodb = require('mongodb');
-
+const Post = require('../../models/postScheme');
 const router = express.Router();
-const mongodbUsername = process.env.MONGODB_USERNAME;
-const mongodbPassword = process.env.MONGODB_PASSWORD;
 
 // Get Posts
 router.get('/', async (req, res) => {
-    const posts = await loadPostsCollection();
-    res.send(await posts.find({}).toArray());
+    const posts = await Post.find()
+	res.send(posts)
 })
-
 
 // Add Post
 router.post('/', async (req, res) => {
-    const posts = await loadPostsCollection();
-    await posts.insertOne({
+    const post = new Post({
+        title: req.body.title,
         text: req.body.text,
-        createdAt: new Date(),
     });
 
-    res.status(201).send();
+    await post.save();
+    res.status(201).send(post);
 })
 
 //Delete Post 
 router.delete('/:id', async (req, res) => {
-    const posts = await loadPostsCollection();
-    await posts.deleteOne({_id: new mongodb.ObjectId(req.params.id)});
-    res.status(200).send();
+    try {
+		await Post.deleteOne({ _id: req.params.id })
+		res.status(204).send()
+	} catch {
+		res.status(404)
+		res.send({ error: "Post doesn't exist!" })
+	}
 })
-
-async function loadPostsCollection(){
-    const client = await mongodb.MongoClient.connect(`mongodb+srv://${mongodbUsername}:${mongodbPassword}@micropost.njnitnw.mongodb.net/test`, {
-        useNewUrlParser: true
-    });
-
-    return client.db('micropost').collection('posts');
-}
-
 
 module.exports = router;

@@ -7,4 +7,5 @@ module.exports = {
   apiUrl: process.env.API_URL,
   mongodbUsername: process.env.MONGODB_USERNAME,
   mongodbPassword: process.env.MONGODB_PASSWORD,
+  mongodbUrl: process.env.MONGODB_URL,
 };
