@@ -10,7 +10,7 @@ const port = config.port;
 
 console.log(config.mongodbUri);
 mongoose
-	.connect(`${config.mongodbUri}`, { useNewUrlParser: true })
+	.connect(`${config.mongodbUri}`, {useNewUrlParser:true, useUnifiedTopology: true})
 	.then(() => {
 		app.use(bodyParser.json());
         app.use(cors());
