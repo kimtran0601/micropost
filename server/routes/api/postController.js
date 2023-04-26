@@ -19,6 +19,27 @@ router.post('/', async (req, res) => {
     res.status(201).send(post);
 })
 
+// Update Post
+router.patch("/:id", async (req, res) => {
+	try {
+		const post = await Post.findOne({ _id: req.params.id })
+
+		if (req.body.title) {
+			post.title = req.body.title
+		}
+
+		if (req.body.text) {
+			post.text = req.body.text
+		}
+
+		await post.save()
+		res.send(post)
+	} catch {
+		res.status(404)
+		res.send({ error: "Post doesn't exist!" })
+	}
+})
+
 //Delete Post 
 router.delete('/:id', async (req, res) => {
     try {
@@ -29,5 +50,7 @@ router.delete('/:id', async (req, res) => {
 		res.send({ error: "Post doesn't exist!" })
 	}
 })
+
+
 
 module.exports = router;
