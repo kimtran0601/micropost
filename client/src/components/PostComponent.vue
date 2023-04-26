@@ -1,30 +1,37 @@
 <template>
-  <v-row class="mb-12 pa-5">
+  <v-row class="mb-12 pa-10">
     <v-col >
     <v-sheet 
         elevation="5"
-        max-width="600"
+        max-width="700"
         rounded="lg"
         width="100%"
-        class="pa-6 text-center mx-auto"
+        class="pa-5 text-center mx-auto"
         color="#9BA4B5"
+        varian="flat"
       >
-        <v-card-title class="headline" id="card-header">Create Post</v-card-title>
-        <v-form @submit.prevent>
+        <v-card-title class="headline" id="card-header">CREATE POST</v-card-title>
+        <v-form ref='form' @submit.prevent>
           <v-text-field
             v-model="title"
+            :rules="[title => !!title || 'This field is required']"
             label="Title"
             variant="solo"
-            bg-color="#F1F6F9"
+            bg-color="#FFFCF2"
+            rounded="xl"
+            required
           ></v-text-field>
 
           <v-textarea
             v-model="text"
+            :rules="[text => !!text || 'This field is required']"
             label="What is in your mind?"
             variant="solo"
-            bg-color="#F1F6F9"
+            bg-color="#FFFCF2"
+            rounded="xl"
+            required
           ></v-textarea>
-          <v-btn @click="createPost" block class="mt-1" color="#F1F6F9">Post</v-btn>
+          <v-btn @click="createPost" id="card-header" class="mt-1" color="#F1F6F9" rounded="xl" border>Post</v-btn>
         </v-form>
       </v-sheet>
   </v-col>
@@ -40,7 +47,7 @@
     >
       <template v-slot:title>
         <div id="card-header">
-          Old Posts
+          OLD POSTS
         </div>
         
       </template>
@@ -67,7 +74,7 @@
       >
         <v-toolbar-title class="text-h6">
           <div class="text-overline" id="card-header">
-            {{ `${post.createdAt.getDate()}/${post.createdAt.getMonth()}/${post.createdAt.getFullYear()}` }}
+            {{ `${post.createdAt.getDate()}/${post.createdAt.getMonth() + 1}/${post.createdAt.getFullYear()}` }}
           </div>
           <div class="text-h6" id="card-header">
             {{ post.title }}
@@ -120,8 +127,20 @@
           <v-card-title class="text-h6">Edit Post</v-card-title>
           <v-card-text>
             <v-form ref="editForm">
-              <v-text-field label="Title" v-model="editedPost.title" variant="solo" bg-color="#F1F6F9"></v-text-field>
-              <v-textarea label="Text" v-model="editedPost.text" variant="solo" bg-color="#F1F6F9"></v-textarea>
+              <v-text-field 
+                label="Title" 
+                v-model="editedPost.title"
+                :rules="[title => !!title || 'This field is required']"
+                variant="solo" 
+                bg-color="#F1F6F9" 
+                required></v-text-field>
+              <v-textarea 
+                label="Text" 
+                v-model="editedPost.text" 
+                :rules="[text => !!text || 'This field is required']"
+                variant="solo" 
+                bg-color="#F1F6F9" 
+                required></v-textarea>
             </v-form>
           </v-card-text>
           <v-card-actions>
@@ -137,7 +156,8 @@
 </template>
 
 <script>
-  import PostService from '../postService'
+  import { resolveTransitionHooks } from 'vue';
+import PostService from '../postService'
 
   export default {
     name: 'PostComponent',
@@ -163,16 +183,23 @@
         }
       },
       async createPost(){
-        await PostService.insertPost(this.title, this.text);
-        this.posts = await PostService.getPost();
+        this.$refs.form.validate();
+        if(this.title && this.text){
+          await PostService.insertPost(this.title, this.text);
+          this.posts = await PostService.getPost();
 
-        this.title = '';
-        this.text = '';
+          this.$refs.form.reset();
+        }
       },
       async updatePost(id){
-        await PostService.updatePost(id, this.editedPost.title, this.editedPost.text);
-        this.posts = await PostService.getPost();
-        // this.editDialog = false;
+        // this.$ref.editForm.validate();
+
+        if (this.editedPost.title && this.editedPost.text){
+          await PostService.updatePost(id, this.editedPost.title, this.editedPost.text);
+          this.posts = await PostService.getPost();
+          this.editDialog = false;
+        }
+        
       },
       async deletePost(id){
         await PostService.deletePost(id);
