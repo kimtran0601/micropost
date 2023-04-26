@@ -6,9 +6,9 @@ const config = require('./config');
 const mongoose= require('mongoose');
 const bcrypt = require('bcrypt');
 
-const port = config.port || 5050;
+const port = config.port;
 
-
+console.log(config.mongodbUri);
 mongoose
 	.connect(`${config.mongodbUri}`, { useNewUrlParser: true })
 	.then(() => {
