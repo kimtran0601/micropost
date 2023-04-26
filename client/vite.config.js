@@ -21,9 +21,9 @@ export default defineConfig({
     }),
   ],
   define: { 'process.env': {} },
-  // build: {
-  //   outDir: path.resolve(__dirname, '../server/public'),
-  // },
+  build: {
+    outDir: path.resolve(__dirname, '../server/public'),
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
@@ -39,23 +39,10 @@ export default defineConfig({
     ],
   },
   server: {
-    port: 3000,
     proxy: {
       '/api': {
         target: 'http://localhost:5050',
       }
     },
-    middleware: [
-      express.static(path.resolve(__dirname, 'public')),
-      (req, res, next) => {
-        if (req.originalUrl.startsWith('/api')) {
-          // Handle API requests separately
-          return next();
-        }
-
-        // Serve index.html for all other routes
-        return res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
-      },
-    ],
   },
 })
