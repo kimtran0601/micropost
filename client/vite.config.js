@@ -21,9 +21,9 @@ export default defineConfig({
     }),
   ],
   define: { 'process.env': {} },
-  build: {
-    outDir: path.resolve(__dirname, '../server/public'),
-  },
+  // build: {
+  //   outDir: path.resolve(__dirname, '../server/public'),
+  // },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
