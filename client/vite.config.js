@@ -42,7 +42,8 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:5050',
+        // target: 'http://localhost:5050',
+        target: 'https://shimmering-twilight-f674f2.netlify.app'
       }
     },
     middleware: [
