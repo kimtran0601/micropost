@@ -11,7 +11,9 @@
     "axios": "^1.3.6",
     "express": "^4.18.2",
     "roboto-fontface": "*",
+    "toastr": "^2.1.4",
     "vue": "^3.2.38",
+    "vue-toastr": "^2.1.2",
     "vuetify": "^3.0.0",
     "webfontloader": "^1.0.0"
   },
